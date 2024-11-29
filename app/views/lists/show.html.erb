@@ -3,5 +3,12 @@
 <p><%= @list.name %></p>
 
 <% @list.movies.each do |movie| %>
- <li><%= movie.title %></li>
+  <% bookmark = Bookmark.find_by(list: @list, movie: movie) %>
+  <li><%= movie.title %>  <%= link_to "remove", bookmark_path(bookmark), data: {turbo_method: :delete, turbo_confirm: 'are you sur to delete?'}%></li>
+<% end %>
+
+<%= simple_form_for [@list, @bookmark] do |form| %>
+  <%= form.input :comment %>
+  <%= form.association :movie, as: :select  %>
+  <%= form.submit %>
 <% end %>
